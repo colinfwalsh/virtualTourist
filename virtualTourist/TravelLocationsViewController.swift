@@ -9,11 +9,17 @@
 import UIKit
 import MapKit
 
-class TravelLocationsViewController: UIViewController {
+class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelegate {
 
+    @IBOutlet weak var mapView: MKMapView!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
-
+        mapView.delegate = self
+        
+        let gesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
+        gesture.delegate = self
+        mapView.addGestureRecognizer(gesture)
     }
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
@@ -21,5 +27,32 @@ class TravelLocationsViewController: UIViewController {
         backItem.title = "OK"
         navigationItem.backBarButtonItem = backItem
     }
+    
+    @objc func mapTapped(gesture: UITapGestureRecognizer) {
+        let location = gesture.location(in: mapView)
+        let coord = mapView.convert(location, toCoordinateFrom: mapView)
+        
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = coord
+        mapView.addAnnotation(annotation)
+    }
+}
 
+extension TravelLocationsViewController: MKMapViewDelegate {
+    func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        print("Selected")
+        performSegue(withIdentifier: "toAlbum", sender: view)
+    }
+    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin") as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+        } else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
 }

@@ -33,12 +33,12 @@
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="0cd-qr-H3c">
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="U0s-4U-Bf6">
-                            <connections>
-                                <segue destination="QIt-gv-ovl" kind="show" id="633-1k-J7v"/>
-                            </connections>
-                        </barButtonItem>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="U0s-4U-Bf6"/>
                     </navigationItem>
+                    <connections>
+                        <outlet property="mapView" destination="Bj5-Be-9yN" id="pWe-kk-tfv"/>
+                        <segue destination="QIt-gv-ovl" kind="show" identifier="toAlbum" id="AFk-Oj-Zsm"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="dkx-z0-nzr" sceneMemberID="firstResponder"/>
             </objects>
