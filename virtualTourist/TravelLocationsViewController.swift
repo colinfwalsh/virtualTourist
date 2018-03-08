@@ -15,5 +15,11 @@ class TravelLocationsViewController: UIViewController {
         super.viewDidLoad()
 
     }
+    
+    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
+        let backItem = UIBarButtonItem()
+        backItem.title = "OK"
+        navigationItem.backBarButtonItem = backItem
+    }
 
 }
