@@ -16,6 +16,7 @@
 		AF18CA0E2051E4110088F273 /* TravelLocationsViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA0D2051E4110088F273 /* TravelLocationsViewController.swift */; };
 		AF18CA102051E9A40088F273 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */; };
 		AF18CA162051F9A30088F273 /* VirtualTouristModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA142051F9A30088F273 /* VirtualTouristModel.xcdatamodeld */; };
+		AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -51,6 +52,7 @@
 		AF18CA0D2051E4110088F273 /* TravelLocationsViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TravelLocationsViewController.swift; sourceTree = "<group>"; };
 		AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		AF18CA152051F9A30088F273 /* VirtualTouristModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTouristModel.xcdatamodel; sourceTree = "<group>"; };
+		AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,6 +107,7 @@
 				AF18C9DF2051E3110088F273 /* AppDelegate.swift */,
 				AF18CA0D2051E4110088F273 /* TravelLocationsViewController.swift */,
 				AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */,
+				AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */,
 				AF18C9E32051E3110088F273 /* Main.storyboard */,
 				AF18C9E62051E3110088F273 /* Assets.xcassets */,
 				AF18C9E82051E3110088F273 /* LaunchScreen.storyboard */,
@@ -266,6 +269,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF18CA162051F9A30088F273 /* VirtualTouristModel.xcdatamodeld in Sources */,
+				AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				AF18C9E02051E3110088F273 /* AppDelegate.swift in Sources */,
 				AF18CA0E2051E4110088F273 /* TravelLocationsViewController.swift in Sources */,
 				AF18CA102051E9A40088F273 /* PhotoAlbumViewController.swift in Sources */,

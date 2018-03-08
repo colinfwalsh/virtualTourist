@@ -56,19 +56,32 @@
                                 <rect key="frame" x="0.0" y="183" width="375" height="440"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <collectionViewFlowLayout key="collectionViewLayout" minimumLineSpacing="10" minimumInteritemSpacing="10" id="ZTx-c6-eEM">
-                                    <size key="itemSize" width="50" height="50"/>
+                                    <size key="itemSize" width="74" height="71"/>
                                     <size key="headerReferenceSize" width="0.0" height="0.0"/>
                                     <size key="footerReferenceSize" width="0.0" height="0.0"/>
                                     <inset key="sectionInset" minX="0.0" minY="0.0" maxX="0.0" maxY="0.0"/>
                                 </collectionViewFlowLayout>
                                 <cells>
-                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" id="M1A-93-Yx1">
-                                        <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="photoCell" id="M1A-93-Yx1" customClass="PhotoAlbumCollectionViewCell" customModule="virtualTourist" customModuleProvider="target">
+                                        <rect key="frame" x="0.0" y="0.0" width="74" height="71"/>
                                         <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                         <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
-                                            <rect key="frame" x="0.0" y="0.0" width="50" height="50"/>
+                                            <rect key="frame" x="0.0" y="0.0" width="74" height="71"/>
                                             <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SHw-e7-OAt">
+                                                    <rect key="frame" x="21" y="25" width="32.5" height="21"/>
+                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                                    <nil key="textColor"/>
+                                                    <nil key="highlightedColor"/>
+                                                </label>
+                                            </subviews>
                                         </view>
+                                        <color key="backgroundColor" red="1" green="0.47873282899425929" blue="0.31434820165963129" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="SHw-e7-OAt" firstAttribute="centerY" secondItem="M1A-93-Yx1" secondAttribute="centerY" id="IKI-4S-NGU"/>
+                                            <constraint firstItem="SHw-e7-OAt" firstAttribute="centerX" secondItem="M1A-93-Yx1" secondAttribute="centerX" id="x6x-cB-DtL"/>
+                                        </constraints>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
@@ -101,10 +114,15 @@
                         <viewLayoutGuide key="safeArea" id="yTm-uw-8Jq"/>
                     </view>
                     <navigationItem key="navigationItem" id="jGz-VS-1Fd"/>
+                    <connections>
+                        <outlet property="collectionView" destination="Gor-Xl-wQE" id="vWf-xp-amn"/>
+                        <outlet property="mapView" destination="2d3-2u-p9F" id="AmG-5x-lC1"/>
+                        <outlet property="toolBarButton" destination="I1j-qR-sXr" id="PH8-2A-Iqi"/>
+                    </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="zSr-lz-7d9" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="862" y="34"/>
+            <point key="canvasLocation" x="861.60000000000002" y="33.733133433283363"/>
         </scene>
         <!--Navigation Controller-->
         <scene sceneID="YB0-nQ-azx">
