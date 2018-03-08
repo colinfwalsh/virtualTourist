@@ -17,7 +17,7 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         super.viewDidLoad()
         mapView.delegate = self
         
-        let gesture = UITapGestureRecognizer(target: self, action: #selector(mapTapped))
+        let gesture = UILongPressGestureRecognizer(target: self, action: #selector(mapTapped))
         gesture.delegate = self
         mapView.addGestureRecognizer(gesture)
     }
@@ -28,7 +28,7 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         navigationItem.backBarButtonItem = backItem
     }
     
-    @objc func mapTapped(gesture: UITapGestureRecognizer) {
+    @objc func mapTapped(gesture: UILongPressGestureRecognizer) {
         let location = gesture.location(in: mapView)
         let coord = mapView.convert(location, toCoordinateFrom: mapView)
         
