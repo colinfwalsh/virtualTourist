@@ -17,6 +17,8 @@
 		AF18CA102051E9A40088F273 /* PhotoAlbumViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */; };
 		AF18CA162051F9A30088F273 /* VirtualTouristModel.xcdatamodeld in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA142051F9A30088F273 /* VirtualTouristModel.xcdatamodeld */; };
 		AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */; };
+		AF3A99B2205B053E0087B8B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3A99B1205B053E0087B8B1 /* Constants.swift */; };
+		AF3A99B4205B116F0087B8B1 /* FlickrAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -53,6 +55,8 @@
 		AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumViewController.swift; sourceTree = "<group>"; };
 		AF18CA152051F9A30088F273 /* VirtualTouristModel.xcdatamodel */ = {isa = PBXFileReference; lastKnownFileType = wrapper.xcdatamodel; path = VirtualTouristModel.xcdatamodel; sourceTree = "<group>"; };
 		AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
+		AF3A99B1205B053E0087B8B1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
+		AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPIClient.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -105,10 +109,10 @@
 			children = (
 				AF18CA142051F9A30088F273 /* VirtualTouristModel.xcdatamodeld */,
 				AF18C9DF2051E3110088F273 /* AppDelegate.swift */,
-				AF18CA0D2051E4110088F273 /* TravelLocationsViewController.swift */,
-				AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */,
-				AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */,
-				AF18C9E32051E3110088F273 /* Main.storyboard */,
+				AF3A99B1205B053E0087B8B1 /* Constants.swift */,
+				AF3A99B6205B24360087B8B1 /* Model */,
+				AF3A99B7205B24440087B8B1 /* Views */,
+				AF3A99B5205B241C0087B8B1 /* Controller */,
 				AF18C9E62051E3110088F273 /* Assets.xcassets */,
 				AF18C9E82051E3110088F273 /* LaunchScreen.storyboard */,
 				AF18C9EB2051E3110088F273 /* Info.plist */,
@@ -132,6 +136,32 @@
 				AF18CA012051E3110088F273 /* Info.plist */,
 			);
 			path = virtualTouristUITests;
+			sourceTree = "<group>";
+		};
+		AF3A99B5205B241C0087B8B1 /* Controller */ = {
+			isa = PBXGroup;
+			children = (
+				AF18CA0D2051E4110088F273 /* TravelLocationsViewController.swift */,
+				AF18CA0F2051E9A40088F273 /* PhotoAlbumViewController.swift */,
+			);
+			path = Controller;
+			sourceTree = "<group>";
+		};
+		AF3A99B6205B24360087B8B1 /* Model */ = {
+			isa = PBXGroup;
+			children = (
+				AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */,
+			);
+			path = Model;
+			sourceTree = "<group>";
+		};
+		AF3A99B7205B24440087B8B1 /* Views */ = {
+			isa = PBXGroup;
+			children = (
+				AF18C9E32051E3110088F273 /* Main.storyboard */,
+				AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */,
+			);
+			path = Views;
 			sourceTree = "<group>";
 		};
 /* End PBXGroup section */
@@ -269,10 +299,12 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF18CA162051F9A30088F273 /* VirtualTouristModel.xcdatamodeld in Sources */,
+				AF3A99B4205B116F0087B8B1 /* FlickrAPIClient.swift in Sources */,
 				AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				AF18C9E02051E3110088F273 /* AppDelegate.swift in Sources */,
 				AF18CA0E2051E4110088F273 /* TravelLocationsViewController.swift in Sources */,
 				AF18CA102051E9A40088F273 /* PhotoAlbumViewController.swift in Sources */,
+				AF3A99B2205B053E0087B8B1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

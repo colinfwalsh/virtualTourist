@@ -24,6 +24,13 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let backItem = UIBarButtonItem()
+        guard let coordinate = sender as? CLLocationCoordinate2D else {return}
+        let destination = segue.destination as! PhotoAlbumViewController
+        destination.location = coordinate
+        FlickrAPIClient.makeRequestWith(lat: Double(coordinate.latitude), long: Double(coordinate.longitude), completion: {dictionary in
+            
+            destination.photosInit = dictionary
+        })
         backItem.title = "OK"
         navigationItem.backBarButtonItem = backItem
     }
@@ -40,8 +47,8 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
 
 extension TravelLocationsViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
-        print("Selected")
-        performSegue(withIdentifier: "toAlbum", sender: view)
+        
+        performSegue(withIdentifier: "toAlbum", sender: view.annotation?.coordinate)
     }
     
     func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {

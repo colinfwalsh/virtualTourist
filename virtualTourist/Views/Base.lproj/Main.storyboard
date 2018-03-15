@@ -69,19 +69,21 @@
                                             <rect key="frame" x="0.0" y="0.0" width="74" height="71"/>
                                             <autoresizingMask key="autoresizingMask"/>
                                             <subviews>
-                                                <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Test" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="SHw-e7-OAt">
-                                                    <rect key="frame" x="21" y="25" width="32.5" height="21"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="17"/>
-                                                    <nil key="textColor"/>
-                                                    <nil key="highlightedColor"/>
-                                                </label>
+                                                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" translatesAutoresizingMaskIntoConstraints="NO" id="IZS-VR-BP9">
+                                                    <rect key="frame" x="0.0" y="0.0" width="74" height="71"/>
+                                                </imageView>
                                             </subviews>
                                         </view>
                                         <color key="backgroundColor" red="1" green="0.47873282899425929" blue="0.31434820165963129" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                                         <constraints>
-                                            <constraint firstItem="SHw-e7-OAt" firstAttribute="centerY" secondItem="M1A-93-Yx1" secondAttribute="centerY" id="IKI-4S-NGU"/>
-                                            <constraint firstItem="SHw-e7-OAt" firstAttribute="centerX" secondItem="M1A-93-Yx1" secondAttribute="centerX" id="x6x-cB-DtL"/>
+                                            <constraint firstItem="IZS-VR-BP9" firstAttribute="height" secondItem="M1A-93-Yx1" secondAttribute="height" id="fXz-lK-zzF"/>
+                                            <constraint firstItem="IZS-VR-BP9" firstAttribute="centerY" secondItem="M1A-93-Yx1" secondAttribute="centerY" id="lxc-jb-CxR"/>
+                                            <constraint firstItem="IZS-VR-BP9" firstAttribute="centerX" secondItem="M1A-93-Yx1" secondAttribute="centerX" id="tW4-bV-Bfa"/>
+                                            <constraint firstItem="IZS-VR-BP9" firstAttribute="width" secondItem="M1A-93-Yx1" secondAttribute="width" id="yHP-7Q-Vai"/>
                                         </constraints>
+                                        <connections>
+                                            <outlet property="imageView" destination="IZS-VR-BP9" id="zYH-TN-x2f"/>
+                                        </connections>
                                     </collectionViewCell>
                                 </cells>
                             </collectionView>
