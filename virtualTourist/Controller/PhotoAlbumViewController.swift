@@ -17,7 +17,7 @@ class PhotoAlbumViewController: UIViewController {
     
     var location: CLLocationCoordinate2D!
     
-    var deleteIndexes: [IndexPath] = []
+    var deleteIndexes: [Int] = []
     
     var photosInit: PhotosModel! {
         didSet {
@@ -66,18 +66,17 @@ class PhotoAlbumViewController: UIViewController {
             })
         } else {
             toolBarButton.title = "New Collection"
-            
-            deleteItems()
+            for i in deleteIndexes {
+                deleteItems(i)
+            }
             self.deleteIndexes.removeAll()
         }
     }
     
-    func deleteItems() {
+    func deleteItems(_ i: Int) {
         collectionView.performBatchUpdates({
-            for items in deleteIndexes {
-                self.photosInit.photos.photo.remove(at: items.row)
-            }
-            self.collectionView.deleteItems(at: self.deleteIndexes)
+            self.photosInit.photos.photo.remove(at: i)
+            self.collectionView.deleteItems(at: [IndexPath(item: i, section: 0)])
         }, completion: { (bool) in
             
         })
@@ -104,9 +103,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
             cell.backgroundColor = .white
             cell.imageView.alpha = 0.5
             cell.isHighlighted = true
-            if !deleteIndexes.contains(indexPath) {
-               deleteIndexes.append(indexPath)
-            }
+            deleteIndexes.append(indexPath.row)
         } else {
             cell.backgroundColor = .gray
             cell.imageView.alpha = 1.0
