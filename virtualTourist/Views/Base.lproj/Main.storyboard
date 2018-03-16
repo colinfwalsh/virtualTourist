@@ -19,23 +19,46 @@
                         <rect key="frame" x="0.0" y="0.0" width="375" height="667"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" ambiguous="YES" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Bj5-Be-9yN">
-                                <rect key="frame" x="0.0" y="163" width="375" height="128"/>
+                            <mapView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" mapType="standard" translatesAutoresizingMaskIntoConstraints="NO" id="Bj5-Be-9yN">
+                                <rect key="frame" x="0.0" y="64" width="375" height="559"/>
                             </mapView>
+                            <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xri-mU-FoZ">
+                                <rect key="frame" x="0.0" y="623" width="375" height="44"/>
+                                <color key="backgroundColor" red="1" green="0.0" blue="0.090672200516758394" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                <items/>
+                                <color key="barTintColor" red="1" green="0.0" blue="0.090672200519999996" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                            </toolbar>
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Tap To Delete" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="RbH-aX-Pr5">
+                                <rect key="frame" x="135.5" y="635" width="104.5" height="21"/>
+                                <fontDescription key="fontDescription" type="system" pointSize="17"/>
+                                <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <nil key="highlightedColor"/>
+                            </label>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
-                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="width" secondItem="8bC-Xf-vdC" secondAttribute="width" id="3tt-qf-G39"/>
-                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="centerY" secondItem="6Tk-OE-BBY" secondAttribute="centerY" id="cgf-U1-ccW"/>
-                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="centerX" secondItem="6Tk-OE-BBY" secondAttribute="centerX" id="iTP-RO-TGg"/>
-                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="height" secondItem="8bC-Xf-vdC" secondAttribute="height" id="pQT-oi-aPo"/>
+                            <constraint firstItem="xri-mU-FoZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3Mm-WD-gUv"/>
+                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7VW-nh-I8X"/>
+                            <constraint firstItem="RbH-aX-Pr5" firstAttribute="centerY" secondItem="xri-mU-FoZ" secondAttribute="centerY" id="BM1-BU-RjX"/>
+                            <constraint firstItem="xri-mU-FoZ" firstAttribute="top" secondItem="Bj5-Be-9yN" secondAttribute="bottom" id="F4C-LF-8iU"/>
+                            <constraint firstItem="RbH-aX-Pr5" firstAttribute="centerX" secondItem="xri-mU-FoZ" secondAttribute="centerX" id="OpO-u5-biS"/>
+                            <constraint firstItem="xri-mU-FoZ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="ZEt-Vb-Czf"/>
+                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hIX-XY-gLg"/>
+                            <constraint firstItem="Bj5-Be-9yN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="jtC-uj-JAG"/>
+                            <constraint firstItem="xri-mU-FoZ" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="q7a-7J-0ZG"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="6Tk-OE-BBY"/>
                     </view>
                     <navigationItem key="navigationItem" title="Virtual Tourist" id="0cd-qr-H3c">
-                        <barButtonItem key="rightBarButtonItem" title="Edit" id="U0s-4U-Bf6"/>
+                        <barButtonItem key="rightBarButtonItem" title="Edit" id="U0s-4U-Bf6">
+                            <connections>
+                                <action selector="editTapped:" destination="BYZ-38-t0r" id="Ury-Y0-B9V"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="deleteLabel" destination="RbH-aX-Pr5" id="KEZ-kb-s9W"/>
+                        <outlet property="deleteToolbar" destination="xri-mU-FoZ" id="4p6-6w-i3u"/>
                         <outlet property="mapView" destination="Bj5-Be-9yN" id="pWe-kk-tfv"/>
                         <segue destination="QIt-gv-ovl" kind="show" identifier="toAlbum" id="AFk-Oj-Zsm"/>
                     </connections>
@@ -91,7 +114,11 @@
                                 <rect key="frame" x="0.0" y="623" width="375" height="44"/>
                                 <items>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="EZk-bJ-cDz"/>
-                                    <barButtonItem title="New Collection" id="I1j-qR-sXr"/>
+                                    <barButtonItem title="New Collection" id="I1j-qR-sXr">
+                                        <connections>
+                                            <action selector="toolButtonTapped:" destination="QIt-gv-ovl" id="oQe-No-efL"/>
+                                        </connections>
+                                    </barButtonItem>
                                     <barButtonItem style="plain" systemItem="flexibleSpace" id="9BS-gO-rVh"/>
                                 </items>
                             </toolbar>

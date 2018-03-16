@@ -17,7 +17,7 @@ class PhotoAlbumViewController: UIViewController {
     
     var location: CLLocationCoordinate2D!
     
-    var photosInit: PhotosModel! {
+    var photosInit: PhotosModel? {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
@@ -32,8 +32,27 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.dataSource = self
         mapView.delegate = self
         
+        let annotation = MKPointAnnotation()
+        annotation.coordinate = location
+        mapView.addAnnotation(annotation)
+        mapView.setCenter(location, animated: true)
+        let region = MKCoordinateRegionMakeWithDistance(location, 1000, 1000)
+        mapView.setRegion(region, animated: true)
+        mapView.isZoomEnabled = false
+        mapView.isScrollEnabled = false
+        mapView.isUserInteractionEnabled = false
     }
- }
+    
+    @IBAction func toolButtonTapped(_ sender: Any) {
+        toolBarButton.isEnabled = false
+        FlickrAPIClient.makeRequestWith(lat: Double(location.latitude), long: Double(location.longitude), completion: {photoObj in
+            DispatchQueue.main.async {
+                self.photosInit = photoObj
+                self.toolBarButton.isEnabled = true
+            }
+        })
+    }
+}
 
 extension PhotoAlbumViewController: UICollectionViewDelegate {
     
@@ -50,11 +69,11 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoAlbumCollectionViewCell
-//        guard let url = URL(string: urlString) else {return UICollectionViewCell()}
-        let url = photosInit.photos.photo[indexPath.row].url_m
+        guard let url = photosInit?.photos.photo[indexPath.row].url_m else {return UICollectionViewCell()}
         guard let imageData = try? Data(contentsOf: url) else {return UICollectionViewCell()}
         
         DispatchQueue.main.async {
+            cell.imageView.contentMode = .scaleToFill
             cell.imageView.image = UIImage(data: imageData)
         }
         return cell
@@ -83,5 +102,15 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {
 }
 
 extension PhotoAlbumViewController: MKMapViewDelegate {
-    
+    func mapView(_ mapView: MKMapView, viewFor annotation: MKAnnotation) -> MKAnnotationView? {
+        var pinView = mapView.dequeueReusableAnnotationView(withIdentifier: "pin") as? MKPinAnnotationView
+        
+        if pinView == nil {
+            pinView = MKPinAnnotationView(annotation: annotation, reuseIdentifier: "pin")
+        } else {
+            pinView!.annotation = annotation
+        }
+        
+        return pinView
+    }
 }
