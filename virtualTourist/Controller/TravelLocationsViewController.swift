@@ -14,14 +14,15 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
     @IBOutlet weak var deleteLabel: UILabel!
     @IBOutlet weak var deleteToolbar: UIToolbar!
     @IBOutlet weak var mapView: MKMapView!
+    @IBOutlet weak var editButton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
         
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(mapTapped))
-        gesture.delegate = self
         mapView.addGestureRecognizer(gesture)
+        
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -37,9 +38,11 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         if deleteToolbar.isHidden {
             mapView.frame.size.height += deleteToolbar.frame.height
             deleteToolbar.frame.origin.y += deleteToolbar.frame.height
+            editButton.title = "Edit"
         } else {
             mapView.frame.size.height -= deleteToolbar.frame.height
             deleteToolbar.frame.origin.y -= deleteToolbar.frame.height
+            editButton.title = "Done"
         }
     }
     
@@ -49,7 +52,6 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         let destination = segue.destination as! PhotoAlbumViewController
         destination.location = coordinate
         FlickrAPIClient.makeRequestWith(lat: Double(coordinate.latitude), long: Double(coordinate.longitude), completion: {photoObj in
-            print(photoObj)
             destination.photosInit = photoObj
         })
         backItem.title = "OK"
@@ -62,14 +64,16 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         showHideToolbar()
     }
     
-    
     @objc func mapTapped(gesture: UILongPressGestureRecognizer) {
-        let location = gesture.location(in: mapView)
-        let coord = mapView.convert(location, toCoordinateFrom: mapView)
+        if gesture.state == .began {
+            let location = gesture.location(in: mapView)
+            let coord = mapView.convert(location, toCoordinateFrom: mapView)
         
-        let annotation = MKPointAnnotation()
-        annotation.coordinate = coord
-        mapView.addAnnotation(annotation)
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = coord
+            mapView.addAnnotation(annotation)
+            return
+        }
     }
 }
 

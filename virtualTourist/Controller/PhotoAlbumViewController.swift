@@ -17,14 +17,16 @@ class PhotoAlbumViewController: UIViewController {
     
     var location: CLLocationCoordinate2D!
     
-    var photosInit: PhotosModel? {
+    var deleteIndexes: [IndexPath] = []
+    
+    var photosInit: PhotosModel! {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
     }
-
+    
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -32,24 +34,52 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.dataSource = self
         mapView.delegate = self
         
+        
+        setAnnotationAndRegion()
+        disableInteraction()
+    }
+    
+    func setAnnotationAndRegion() {
         let annotation = MKPointAnnotation()
         annotation.coordinate = location
         mapView.addAnnotation(annotation)
         mapView.setCenter(location, animated: true)
         let region = MKCoordinateRegionMakeWithDistance(location, 1000, 1000)
         mapView.setRegion(region, animated: true)
+    }
+    
+    func disableInteraction() {
         mapView.isZoomEnabled = false
         mapView.isScrollEnabled = false
         mapView.isUserInteractionEnabled = false
     }
     
     @IBAction func toolButtonTapped(_ sender: Any) {
-        toolBarButton.isEnabled = false
-        FlickrAPIClient.makeRequestWith(lat: Double(location.latitude), long: Double(location.longitude), completion: {photoObj in
-            DispatchQueue.main.async {
-                self.photosInit = photoObj
-                self.toolBarButton.isEnabled = true
+        
+        if toolBarButton.title == "New Collection" {
+            toolBarButton.isEnabled = false
+            FlickrAPIClient.makeRequestWith(lat: Double(location.latitude), long: Double(location.longitude), completion: {photoObj in
+                DispatchQueue.main.async {
+                    self.photosInit = photoObj
+                    self.toolBarButton.isEnabled = true
+                }
+            })
+        } else {
+            toolBarButton.title = "New Collection"
+            
+            deleteItems()
+            self.deleteIndexes.removeAll()
+        }
+    }
+    
+    func deleteItems() {
+        collectionView.performBatchUpdates({
+            for items in deleteIndexes {
+                self.photosInit.photos.photo.remove(at: items.row)
             }
+            self.collectionView.deleteItems(at: self.deleteIndexes)
+        }, completion: { (bool) in
+            
         })
     }
 }
@@ -63,18 +93,43 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         if let photosInit = photosInit {
             return photosInit.photos.photo.count
         } else {
-            return 0
+            return 20
+        }
+    }
+    
+    func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        let cell = collectionView.cellForItem(at: indexPath) as! PhotoAlbumCollectionViewCell
+        toolBarButton.title = "Remove Selected Pictures"
+        if cell.imageView.alpha == 1.0 {
+            cell.backgroundColor = .white
+            cell.imageView.alpha = 0.5
+            cell.isHighlighted = true
+            if !deleteIndexes.contains(indexPath) {
+               deleteIndexes.append(indexPath)
+            }
+        } else {
+            cell.backgroundColor = .gray
+            cell.imageView.alpha = 1.0
+            cell.isHighlighted = false
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoAlbumCollectionViewCell
-        guard let url = photosInit?.photos.photo[indexPath.row].url_m else {return UICollectionViewCell()}
-        guard let imageData = try? Data(contentsOf: url) else {return UICollectionViewCell()}
+        
+        let activityIndicator = UIActivityIndicatorView()
+        activityIndicator.color = .white
+        activityIndicator.center = CGPoint(x: cell.imageView.frame.width/2, y: cell.imageView.frame.height/2)
+        cell.contentView.addSubview(activityIndicator)
+        activityIndicator.startAnimating()
+        
+        guard let url = photosInit?.photos.photo[indexPath.row].url_m else {return cell}
+        guard let imageData = try? Data(contentsOf: url) else {return cell}
         
         DispatchQueue.main.async {
             cell.imageView.contentMode = .scaleToFill
             cell.imageView.image = UIImage(data: imageData)
+            activityIndicator.stopAnimating()
         }
         return cell
     }
@@ -93,12 +148,12 @@ extension PhotoAlbumViewController: UICollectionViewDelegateFlowLayout {
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, minimumInteritemSpacingForSectionAt section: Int) -> CGFloat {
         return 5
     }
- 
+    
     
     func collectionView(_ collectionView: UICollectionView, layout collectionViewLayout: UICollectionViewLayout, insetForSectionAt section: Int) -> UIEdgeInsets {
-        return UIEdgeInsets(top: 5, left: 7.5, bottom: 5, right: 7.5)
+        return UIEdgeInsets(top: 5, left: 5, bottom: 5, right: 5)
     }
- 
+    
 }
 
 extension PhotoAlbumViewController: MKMapViewDelegate {

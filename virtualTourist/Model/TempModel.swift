@@ -31,10 +31,10 @@ struct PhotosModel: Codable {
             let width_m: String
         }
         
-        let photo: [Photo]
+        var photo: [Photo]
     }
     
-    let photos: PhotosObject
+    var photos: PhotosObject
 }
 
 
