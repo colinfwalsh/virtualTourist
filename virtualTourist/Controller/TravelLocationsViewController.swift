@@ -27,9 +27,9 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         guard let coordinate = sender as? CLLocationCoordinate2D else {return}
         let destination = segue.destination as! PhotoAlbumViewController
         destination.location = coordinate
-        FlickrAPIClient.makeRequestWith(lat: Double(coordinate.latitude), long: Double(coordinate.longitude), completion: {dictionary in
-            
-            destination.photosInit = dictionary
+        FlickrAPIClient.makeRequestWith(lat: Double(coordinate.latitude), long: Double(coordinate.longitude), completion: {photoObj in
+            print(photoObj)
+            destination.photosInit = photoObj
         })
         backItem.title = "OK"
         navigationItem.backBarButtonItem = backItem

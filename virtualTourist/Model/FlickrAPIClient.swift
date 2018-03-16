@@ -9,7 +9,7 @@
 import Foundation
 
 struct FlickrAPIClient {
-    static func makeRequestWith(lat: Double, long: Double, completion: @escaping (([String:Any]) -> Void)) {
+    static func makeRequestWith(lat: Double, long: Double, completion: @escaping ((PhotosModel) -> Void)) {
         guard let url = Constants().createUrl(lat: lat, long: long) else {return}
         
         let task = URLSession.shared.dataTask(with: URLRequest(url: url)) {(data, response, error) in
@@ -19,13 +19,17 @@ struct FlickrAPIClient {
             }
             
             if let data = data {
-                guard let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
-                    print("Error parsing data")
+                guard let photoObj = try? JSONDecoder().decode(PhotosModel.self, from: data) else {
+                    print("Error parsing!")
                     return}
-                guard let jsonObj = json as? [String:Any] else {
-                    print("Error casting for some reason")
-                    return}
-                completion(jsonObj)
+//                guard let json = try?
+//                guard let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
+//                    print("Error parsing data")
+//                    return}
+//                guard let jsonObj = json. else {
+//                    print("Error casting for some reason")
+//                    return}
+                completion(photoObj)
             }
         }
         task.resume()

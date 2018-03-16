@@ -17,14 +17,14 @@ class PhotoAlbumViewController: UIViewController {
     
     var location: CLLocationCoordinate2D!
     
-    var photosInit: [String: Any] = [:] {
+    var photosInit: PhotosModel! {
         didSet {
             DispatchQueue.main.async {
                 self.collectionView.reloadData()
             }
         }
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
         
@@ -41,17 +41,17 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
 
 extension PhotoAlbumViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        let photoDict: [String:Any] = photosInit["photos"] as! [String : Any]
-        let photoArray: [[String:Any]] = photoDict["photo"]! as! [[String:Any]]
-        return photoArray.count
+        if let photosInit = photosInit {
+            return photosInit.photos.photo.count
+        } else {
+            return 0
+        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoAlbumCollectionViewCell
-        let photoDict: [String:Any] = photosInit["photos"] as! [String : Any]
-        let photoArray: [[String:Any]] = photoDict["photo"]! as! [[String:Any]]
-        guard let urlString = photoArray[indexPath.row]["url_m"] as? String else {return UICollectionViewCell()}
-        guard let url = URL(string: urlString) else {return UICollectionViewCell()}
+//        guard let url = URL(string: urlString) else {return UICollectionViewCell()}
+        let url = photosInit.photos.photo[indexPath.row].url_m
         guard let imageData = try? Data(contentsOf: url) else {return UICollectionViewCell()}
         
         DispatchQueue.main.async {

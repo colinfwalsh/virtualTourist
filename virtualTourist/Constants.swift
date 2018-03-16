@@ -10,7 +10,7 @@ import Foundation
 
 struct Constants {
     
-    let apiKey = "093c81e10f6352870eec0a2531377fde"
+    let apiKey = "d99574b2fea1a5693004481c53f4e21f"
     
     private func constructUrlString(lat: Double, long: Double) -> String {
         return "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(apiKey)&lat=\(lat)&lon=\(long)&format=json&nojsoncallback=1&extras=url_m"

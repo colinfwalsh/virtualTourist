@@ -19,6 +19,7 @@
 		AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */; };
 		AF3A99B2205B053E0087B8B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3A99B1205B053E0087B8B1 /* Constants.swift */; };
 		AF3A99B4205B116F0087B8B1 /* FlickrAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */; };
+		AFD95EE4205C37A600129BCD /* TempModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD95EE3205C37A600129BCD /* TempModel.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -57,6 +58,7 @@
 		AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		AF3A99B1205B053E0087B8B1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPIClient.swift; sourceTree = "<group>"; };
+		AFD95EE3205C37A600129BCD /* TempModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -151,6 +153,7 @@
 			isa = PBXGroup;
 			children = (
 				AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */,
+				AFD95EE3205C37A600129BCD /* TempModel.swift */,
 			);
 			path = Model;
 			sourceTree = "<group>";
@@ -299,6 +302,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				AF18CA162051F9A30088F273 /* VirtualTouristModel.xcdatamodeld in Sources */,
+				AFD95EE4205C37A600129BCD /* TempModel.swift in Sources */,
 				AF3A99B4205B116F0087B8B1 /* FlickrAPIClient.swift in Sources */,
 				AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */,
 				AF18C9E02051E3110088F273 /* AppDelegate.swift in Sources */,
