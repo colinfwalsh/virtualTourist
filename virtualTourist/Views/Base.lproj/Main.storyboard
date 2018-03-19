@@ -109,6 +109,27 @@
                                             <outlet property="imageView" destination="IZS-VR-BP9" id="zYH-TN-x2f"/>
                                         </connections>
                                     </collectionViewCell>
+                                    <collectionViewCell opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" reuseIdentifier="loadingCell" id="Bx8-JG-ilw" customClass="LoadingCollectionViewCell" customModule="virtualTourist" customModuleProvider="target">
+                                        <rect key="frame" x="100.5" y="0.0" width="74" height="71"/>
+                                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
+                                        <view key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" insetsLayoutMarginsFromSafeArea="NO">
+                                            <rect key="frame" x="0.0" y="0.0" width="74" height="71"/>
+                                            <autoresizingMask key="autoresizingMask"/>
+                                            <subviews>
+                                                <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="whiteLarge" translatesAutoresizingMaskIntoConstraints="NO" id="iMk-V6-Fpa">
+                                                    <rect key="frame" x="19" y="17" width="37" height="37"/>
+                                                </activityIndicatorView>
+                                            </subviews>
+                                        </view>
+                                        <color key="backgroundColor" red="0.4004614637305699" green="0.4004614637305699" blue="0.4004614637305699" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <constraints>
+                                            <constraint firstItem="iMk-V6-Fpa" firstAttribute="centerX" secondItem="Bx8-JG-ilw" secondAttribute="centerX" id="BHB-Mv-B6B"/>
+                                            <constraint firstItem="iMk-V6-Fpa" firstAttribute="centerY" secondItem="Bx8-JG-ilw" secondAttribute="centerY" id="c5O-tE-VeE"/>
+                                        </constraints>
+                                        <connections>
+                                            <outlet property="activityIndicatorView" destination="iMk-V6-Fpa" id="3dL-hW-TOA"/>
+                                        </connections>
+                                    </collectionViewCell>
                                 </cells>
                             </collectionView>
                             <toolbar opaque="NO" clearsContextBeforeDrawing="NO" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="zuB-3Z-Xdn">

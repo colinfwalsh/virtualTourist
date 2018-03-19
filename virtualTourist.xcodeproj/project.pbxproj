@@ -19,6 +19,7 @@
 		AF18CA18205202700088F273 /* PhotoAlbumCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */; };
 		AF3A99B2205B053E0087B8B1 /* Constants.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3A99B1205B053E0087B8B1 /* Constants.swift */; };
 		AF3A99B4205B116F0087B8B1 /* FlickrAPIClient.swift in Sources */ = {isa = PBXBuildFile; fileRef = AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */; };
+		AFB49E8D205FECAD004FB207 /* LoadingCollectionViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFB49E8C205FECAD004FB207 /* LoadingCollectionViewCell.swift */; };
 		AFD95EE4205C37A600129BCD /* TempModel.swift in Sources */ = {isa = PBXBuildFile; fileRef = AFD95EE3205C37A600129BCD /* TempModel.swift */; };
 /* End PBXBuildFile section */
 
@@ -58,6 +59,7 @@
 		AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PhotoAlbumCollectionViewCell.swift; sourceTree = "<group>"; };
 		AF3A99B1205B053E0087B8B1 /* Constants.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Constants.swift; sourceTree = "<group>"; };
 		AF3A99B3205B116F0087B8B1 /* FlickrAPIClient.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = FlickrAPIClient.swift; sourceTree = "<group>"; };
+		AFB49E8C205FECAD004FB207 /* LoadingCollectionViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LoadingCollectionViewCell.swift; sourceTree = "<group>"; };
 		AFD95EE3205C37A600129BCD /* TempModel.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = TempModel.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
@@ -163,6 +165,7 @@
 			children = (
 				AF18C9E32051E3110088F273 /* Main.storyboard */,
 				AF18CA17205202700088F273 /* PhotoAlbumCollectionViewCell.swift */,
+				AFB49E8C205FECAD004FB207 /* LoadingCollectionViewCell.swift */,
 			);
 			path = Views;
 			sourceTree = "<group>";
@@ -308,6 +311,7 @@
 				AF18C9E02051E3110088F273 /* AppDelegate.swift in Sources */,
 				AF18CA0E2051E4110088F273 /* TravelLocationsViewController.swift in Sources */,
 				AF18CA102051E9A40088F273 /* PhotoAlbumViewController.swift in Sources */,
+				AFB49E8D205FECAD004FB207 /* LoadingCollectionViewCell.swift in Sources */,
 				AF3A99B2205B053E0087B8B1 /* Constants.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

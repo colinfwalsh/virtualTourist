@@ -78,8 +78,7 @@ class PhotoAlbumViewController: UIViewController {
             self.photosInit.photos.photo.remove(at: i)
             self.collectionView.deleteItems(at: [IndexPath(item: i, section: 0)])
         }, completion: { (bool) in
-            
-        })
+            self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)        })
     }
 }
 
@@ -102,31 +101,30 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         if cell.imageView.alpha == 1.0 {
             cell.backgroundColor = .white
             cell.imageView.alpha = 0.5
-            cell.isHighlighted = true
             deleteIndexes.append(indexPath.row)
         } else {
             cell.backgroundColor = .gray
             cell.imageView.alpha = 1.0
-            cell.isHighlighted = false
         }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
+        
+        
+        guard let url = photosInit?.photos.photo[indexPath.row].url_m else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "loadingCell", for: indexPath) as! LoadingCollectionViewCell
+            cell.activityIndicatorView.startAnimating()
+            return cell}
+        guard let imageData = try? Data(contentsOf: url) else {
+            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "loadingCell", for: indexPath) as! LoadingCollectionViewCell
+            cell.activityIndicatorView.startAnimating()
+            return cell}
+        
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoAlbumCollectionViewCell
-        
-        let activityIndicator = UIActivityIndicatorView()
-        activityIndicator.color = .white
-        activityIndicator.center = CGPoint(x: cell.imageView.frame.width/2, y: cell.imageView.frame.height/2)
-        cell.contentView.addSubview(activityIndicator)
-        activityIndicator.startAnimating()
-        
-        guard let url = photosInit?.photos.photo[indexPath.row].url_m else {return cell}
-        guard let imageData = try? Data(contentsOf: url) else {return cell}
         
         DispatchQueue.main.async {
             cell.imageView.contentMode = .scaleToFill
             cell.imageView.image = UIImage(data: imageData)
-            activityIndicator.stopAnimating()
         }
         return cell
     }
