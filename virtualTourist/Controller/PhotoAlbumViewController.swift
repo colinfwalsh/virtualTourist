@@ -67,13 +67,15 @@ class PhotoAlbumViewController: UIViewController {
         } else {
             toolBarButton.title = "New Collection"
             for i in deleteIndexes {
-                deleteItems(i)
+                self.photosInit.photos.photo.remove(at: i)
+//                deleteItems(i)
             }
             self.deleteIndexes.removeAll()
         }
     }
     
     func deleteItems(_ i: Int) {
+        //Do this once coreData is up and running
         collectionView.performBatchUpdates({
             self.photosInit.photos.photo.remove(at: i)
             self.collectionView.deleteItems(at: [IndexPath(item: i, section: 0)])
@@ -96,29 +98,28 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
     }
     
     func collectionView(_ collectionView: UICollectionView, didSelectItemAt indexPath: IndexPath) {
+        // Needs work, needs to be done with CoreData implementation
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoAlbumCollectionViewCell
         toolBarButton.title = "Remove Selected Pictures"
-        if cell.imageView.alpha == 1.0 {
-            cell.backgroundColor = .white
-            cell.imageView.alpha = 0.5
-            deleteIndexes.append(indexPath.row)
-        } else {
-            cell.backgroundColor = .gray
-            cell.imageView.alpha = 1.0
-        }
+        deleteIndexes.append(indexPath.row)
+//        if cell.imageView.alpha == 1.0 {
+//            cell.backgroundColor = .white
+//            cell.imageView.alpha = 0.5
+//            deleteIndexes.append(indexPath.row)
+//        } else {
+//            cell.backgroundColor = .gray
+//            cell.imageView.alpha = 1.0
+//        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
-        
         
         guard let url = photosInit?.photos.photo[indexPath.row].url_m else {
             let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "loadingCell", for: indexPath) as! LoadingCollectionViewCell
             cell.activityIndicatorView.startAnimating()
             return cell}
         guard let imageData = try? Data(contentsOf: url) else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "loadingCell", for: indexPath) as! LoadingCollectionViewCell
-            cell.activityIndicatorView.startAnimating()
-            return cell}
+           return UICollectionViewCell()}
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoAlbumCollectionViewCell
         
@@ -126,6 +127,7 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
             cell.imageView.contentMode = .scaleToFill
             cell.imageView.image = UIImage(data: imageData)
         }
+        
         return cell
     }
     
