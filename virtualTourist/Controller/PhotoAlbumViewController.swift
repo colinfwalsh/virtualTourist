@@ -15,7 +15,7 @@ class PhotoAlbumViewController: UIViewController {
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var toolBarButton: UIBarButtonItem!
     
-    var location: CLLocationCoordinate2D!
+    var pin: Pin!
     
     var deleteIndexes: [Int] = []
     
@@ -41,10 +41,11 @@ class PhotoAlbumViewController: UIViewController {
     
     func setAnnotationAndRegion() {
         let annotation = MKPointAnnotation()
-        annotation.coordinate = location
+        let locationAsC2D = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+        annotation.coordinate = locationAsC2D
         mapView.addAnnotation(annotation)
-        mapView.setCenter(location, animated: true)
-        let region = MKCoordinateRegionMakeWithDistance(location, 1000, 1000)
+        mapView.setCenter(locationAsC2D, animated: true)
+        let region = MKCoordinateRegionMakeWithDistance(locationAsC2D, 1000, 1000)
         mapView.setRegion(region, animated: true)
     }
     
@@ -58,7 +59,7 @@ class PhotoAlbumViewController: UIViewController {
         
         if toolBarButton.title == "New Collection" {
             toolBarButton.isEnabled = false
-            FlickrAPIClient.makeRequestWith(lat: Double(location.latitude), long: Double(location.longitude), completion: {photoObj in
+            FlickrAPIClient.makeRequestWith(lat: Double(pin.latitude), long: Double(pin.longitude), completion: {photoObj in
                 DispatchQueue.main.async {
                     self.photosInit = photoObj
                     self.toolBarButton.isEnabled = true

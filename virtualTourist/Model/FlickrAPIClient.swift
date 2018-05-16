@@ -20,15 +20,7 @@ struct FlickrAPIClient {
             
             if let data = data {
                 guard let photoObj = try? JSONDecoder().decode(PhotosModel.self, from: data) else {
-                    print("Error parsing!")
-                    return}
-//                guard let json = try?
-//                guard let json = try? JSONSerialization.jsonObject(with: data, options: []) else {
-//                    print("Error parsing data")
-//                    return}
-//                guard let jsonObj = json. else {
-//                    print("Error casting for some reason")
-//                    return}
+                    fatalError("There was an error parsing the model, maybe the internet is down?")}
                 completion(photoObj)
             }
         }

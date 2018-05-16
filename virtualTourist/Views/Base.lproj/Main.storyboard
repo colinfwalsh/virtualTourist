@@ -34,14 +34,19 @@
                                 <color key="textColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <nil key="highlightedColor"/>
                             </label>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="Twb-fV-84o">
+                                <rect key="frame" x="177" y="333" width="20" height="20"/>
+                            </activityIndicatorView>
                         </subviews>
                         <color key="backgroundColor" red="1" green="1" blue="1" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
                         <constraints>
                             <constraint firstItem="xri-mU-FoZ" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="3Mm-WD-gUv"/>
                             <constraint firstItem="Bj5-Be-9yN" firstAttribute="trailing" secondItem="6Tk-OE-BBY" secondAttribute="trailing" id="7VW-nh-I8X"/>
                             <constraint firstItem="RbH-aX-Pr5" firstAttribute="centerY" secondItem="xri-mU-FoZ" secondAttribute="centerY" id="BM1-BU-RjX"/>
+                            <constraint firstItem="Twb-fV-84o" firstAttribute="centerX" secondItem="Bj5-Be-9yN" secondAttribute="centerX" id="DuU-TL-Kyi"/>
                             <constraint firstItem="xri-mU-FoZ" firstAttribute="top" secondItem="Bj5-Be-9yN" secondAttribute="bottom" id="F4C-LF-8iU"/>
                             <constraint firstItem="RbH-aX-Pr5" firstAttribute="centerX" secondItem="xri-mU-FoZ" secondAttribute="centerX" id="OpO-u5-biS"/>
+                            <constraint firstItem="Twb-fV-84o" firstAttribute="centerY" secondItem="Bj5-Be-9yN" secondAttribute="centerY" id="RRg-gK-Eri"/>
                             <constraint firstItem="xri-mU-FoZ" firstAttribute="bottom" secondItem="6Tk-OE-BBY" secondAttribute="bottom" id="ZEt-Vb-Czf"/>
                             <constraint firstItem="Bj5-Be-9yN" firstAttribute="leading" secondItem="6Tk-OE-BBY" secondAttribute="leading" id="hIX-XY-gLg"/>
                             <constraint firstItem="Bj5-Be-9yN" firstAttribute="top" secondItem="6Tk-OE-BBY" secondAttribute="top" id="jtC-uj-JAG"/>
@@ -60,6 +65,7 @@
                         <outlet property="deleteLabel" destination="RbH-aX-Pr5" id="KEZ-kb-s9W"/>
                         <outlet property="deleteToolbar" destination="xri-mU-FoZ" id="4p6-6w-i3u"/>
                         <outlet property="editButton" destination="U0s-4U-Bf6" id="yvK-Qb-bvL"/>
+                        <outlet property="loadingIndicator" destination="Twb-fV-84o" id="TIQ-Aa-l3k"/>
                         <outlet property="mapView" destination="Bj5-Be-9yN" id="pWe-kk-tfv"/>
                         <segue destination="QIt-gv-ovl" kind="show" identifier="toAlbum" id="AFk-Oj-Zsm"/>
                     </connections>

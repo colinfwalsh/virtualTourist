@@ -8,6 +8,7 @@
 
 import UIKit
 import MapKit
+import CoreData
 
 class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelegate {
 
@@ -15,13 +16,24 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
     @IBOutlet weak var deleteToolbar: UIToolbar!
     @IBOutlet weak var mapView: MKMapView!
     @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var loadingIndicator: UIActivityIndicatorView!
+    
+    var pins: [Pin] = []
+    
+    var dataController: DataController!
     
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        
+        loadingIndicator.isHidden = true
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(mapTapped))
         mapView.addGestureRecognizer(gesture)
+        
+        let fetchRequest: NSFetchRequest<Pin> = Pin.fetchRequest()
+        guard let result = try? dataController.viewContext.fetch(fetchRequest) else {return}
+        
+        pins = result
+        
         
     }
     
@@ -48,14 +60,12 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
     
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         let backItem = UIBarButtonItem()
-        guard let coordinate = sender as? CLLocationCoordinate2D else {return}
+        guard let pin = sender as? Pin else {return}
         let destination = segue.destination as! PhotoAlbumViewController
-        destination.location = coordinate
-        FlickrAPIClient.makeRequestWith(lat: Double(coordinate.latitude), long: Double(coordinate.longitude), completion: {photoObj in
-            destination.photosInit = photoObj
-        })
+        destination.pin = pin
         backItem.title = "OK"
         navigationItem.backBarButtonItem = backItem
+
     }
     
     @IBAction func editTapped(_ sender: Any) {
@@ -72,6 +82,11 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
             let annotation = MKPointAnnotation()
             annotation.coordinate = coord
             mapView.addAnnotation(annotation)
+            let newPin = Pin(context: dataController.viewContext)
+            newPin.latitude = Double(coord.latitude)
+            newPin.longitude = Double(coord.longitude)
+            pins.insert(newPin, at: 0)
+            try? dataController.viewContext.save()
             return
         }
     }
@@ -79,10 +94,39 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
 
 extension TravelLocationsViewController: MKMapViewDelegate {
     func mapView(_ mapView: MKMapView, didSelect view: MKAnnotationView) {
+        loadingIndicator.isHidden = false
+        loadingIndicator.startAnimating()
+        let pinSelected = pins.filter { (pin) -> Bool in
+            return (pin.latitude == view.annotation?.coordinate.latitude) && (pin.longitude == view.annotation?.coordinate.longitude)
+        }
         if deleteToolbar.isHidden {
-            performSegue(withIdentifier: "toAlbum", sender: view.annotation?.coordinate)
+            let pinToSend = pinSelected[0]
+            FlickrAPIClient.makeRequestWith(lat: pinToSend.latitude, long: pinToSend.longitude, completion: {[unowned self] photoObj in
+                
+                var photoArray : [Photo] = []
+                for pic in photoObj.photos.photo {
+                    let photoCD = Photo(context: self.dataController.viewContext)
+                    photoCD.photoBinary = try? Data(contentsOf: pic.url_m)
+                    photoArray.append(photoCD)
+                }
+                
+                DispatchQueue.main.async {
+                    let orderedSet = NSOrderedSet(array: photoArray)
+                    pinToSend.addToPhotos(orderedSet)
+                    try? self.dataController.viewContext.save()
+                    self.loadingIndicator.stopAnimating()
+                    self.performSegue(withIdentifier: "toAlbum", sender: pinToSend)
+                    
+                }
+            })
+            
         } else {
             mapView.removeAnnotation(view.annotation!)
+            let index = pins.index(of: pinSelected[0])
+            dataController.viewContext.delete(pinSelected[0])
+            loadingIndicator.stopAnimating()
+            try? dataController.viewContext.save()
+            pins.remove(at: index!)
         }
     }
     

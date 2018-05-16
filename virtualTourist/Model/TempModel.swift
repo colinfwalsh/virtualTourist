@@ -7,6 +7,7 @@
 //
 
 import Foundation
+import CoreData
 
 struct PhotosModel: Codable {
     
@@ -32,6 +33,7 @@ struct PhotosModel: Codable {
         }
         
         var photo: [Photo]
+        
     }
     
     var photos: PhotosObject
