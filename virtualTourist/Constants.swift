@@ -12,12 +12,12 @@ struct Constants {
     
     let apiKey = "d99574b2fea1a5693004481c53f4e21f"
     
-    private func constructUrlString(lat: Double, long: Double) -> String {
-        return "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(apiKey)&lat=\(lat)&lon=\(long)&format=json&nojsoncallback=1&extras=url_m&per_page=21"
+    private func constructUrlString(lat: Double, long: Double, page: Int) -> String {
+        return "https://api.flickr.com/services/rest/?method=flickr.photos.search&api_key=\(apiKey)&lat=\(lat)&lon=\(long)&format=json&nojsoncallback=1&extras=url_m&per_page=21&page=\(page)"
     }
     
-    func createUrl(lat: Double, long: Double) -> URL? {
-        return URL(string: constructUrlString(lat: lat, long: long))
+    func createUrl(lat: Double, long: Double, page: Int) -> URL? {
+        return URL(string: constructUrlString(lat: lat, long: long, page: page))
     }
     
 }

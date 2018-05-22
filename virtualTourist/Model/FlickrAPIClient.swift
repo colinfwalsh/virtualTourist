@@ -9,8 +9,8 @@
 import Foundation
 
 struct FlickrAPIClient {
-    static func makeRequestWith(lat: Double, long: Double, completion: @escaping ((PhotosModel) -> Void)) {
-        guard let url = Constants().createUrl(lat: lat, long: long) else {return}
+    static func makeRequestWith(lat: Double, long: Double, page: Int, completion: @escaping ((PhotosModel) -> Void)) {
+        guard let url = Constants().createUrl(lat: lat, long: long, page: page) else {return}
         
         let task = URLSession.shared.dataTask(with: URLRequest(url: url)) {(data, response, error) in
             if let error = error {

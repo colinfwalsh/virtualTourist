@@ -19,8 +19,9 @@ class PhotoAlbumViewController: UIViewController {
     
     var dataController: DataController!
     
-    var deleteIndexes: [Int] = []
+    var deleteIndexes: [IndexPath] = []
     
+    var pageNumber = 1
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,32 +31,37 @@ class PhotoAlbumViewController: UIViewController {
         mapView.delegate = self
         
         if (self.pin.photos?.array.isEmpty)! {
-            FlickrAPIClient.makeRequestWith(lat: self.pin.latitude, long: self.pin.longitude, completion: {[weak self] photoObj in
-                
+            FlickrAPIClient.makeRequestWith(lat: self.pin.latitude, long: self.pin.longitude, page: pageNumber, completion: {[weak self] photoObj in
                 guard let `self` = self else {return}
-                
-                let photoArray: [Photo] = photoObj.photos.photo.map { item in
-                    let photoCD = Photo(context: self.dataController.viewContext)
-                    let photoData = try? Data(contentsOf: item.url_m)
-                    if let image = UIImage(data: photoData!) {
-                        photoCD.photoBinary = UIImageJPEGRepresentation(image, 1)
-                        return photoCD
-                    } else {
-                        return Photo()
-                    }
-                }
-                
-                DispatchQueue.main.async {
-                    let orderedSet = NSOrderedSet(array: photoArray)
-                    self.pin.addToPhotos(orderedSet)
-                    try? self.dataController.viewContext.save()
-                    self.collectionView.reloadData()
-                }
+                self.buildAndAddPhotoArray(photoObj)
             })
         }
         
         setAnnotationAndRegion()
         disableInteraction()
+    }
+    
+    func buildAndAddPhotoArray(_ photoObj: PhotosModel) -> Void {
+        DispatchQueue.main.async {
+            let orderedSet = NSOrderedSet(array: self.createPhotoArray(photoObj))
+            self.pin.addToPhotos(orderedSet)
+            try? self.dataController.viewContext.save()
+            self.toolBarButton.isEnabled = true
+            self.collectionView.reloadData()
+        }
+    }
+    
+    func createPhotoArray(_ photoObj: PhotosModel) -> [Photo] {
+        return photoObj.photos.photo.map { item in
+            let photoCD = Photo(context: self.dataController.viewContext)
+            let photoData = try? Data(contentsOf: item.url_m)
+            if let image = UIImage(data: photoData!) {
+                photoCD.photoBinary = UIImageJPEGRepresentation(image, 1)
+                return photoCD
+            } else {
+                return Photo()
+            }
+        }
     }
     
     func setAnnotationAndRegion() {
@@ -78,31 +84,44 @@ class PhotoAlbumViewController: UIViewController {
         
         if toolBarButton.title == "New Collection" {
             toolBarButton.isEnabled = false
-            FlickrAPIClient.makeRequestWith(lat: Double(pin.latitude), long: Double(pin.longitude), completion: {photoObj in
-                DispatchQueue.main.async {
-                    self.toolBarButton.isEnabled = true
-                }
-            })
+            
+            for photo in pin.photos! {
+                dataController.viewContext.delete(photo as! Photo)
+                self.collectionView.reloadData()
+            }
+            
         } else {
             toolBarButton.title = "New Collection"
-            for i in deleteIndexes {
-                //                deleteItems(i)
+            
+            if (deleteIndexes.isEmpty) {
+                return
             }
+            
+            for i in deleteIndexes {
+                deletePhotos(i.row)
+                let cell = collectionView.cellForItem(at: i) as? PhotoAlbumCollectionViewCell
+                cell?.backgroundColor = .gray
+                cell?.imageView.alpha = 1.0
+            }
+            
             self.deleteIndexes.removeAll()
+            try? dataController.viewContext.save()
+            
+            if (pin.photos!.array.count > 0) {
+                self.collectionView.reloadData()
+                return
+            }
         }
+        
+        pageNumber += 1
+        FlickrAPIClient.makeRequestWith(lat: Double(pin.latitude), long: Double(pin.longitude), page: pageNumber, completion: {photoObj in
+            self.buildAndAddPhotoArray(photoObj)
+        })
     }
     
-    func deleteItems(_ i: Int) {
-        //Do this once coreData is up and running
-        collectionView.performBatchUpdates({
-            self.collectionView.deleteItems(at: [IndexPath(item: i, section: 0)])
-        }, completion: { (bool) in
-            self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)        })
+    func deletePhotos(_ i: Int) {
+        dataController.viewContext.delete(self.pin.photos?.object(at: i) as! Photo)
     }
-}
-
-extension PhotoAlbumViewController: UICollectionViewDelegate {
-    
 }
 
 extension PhotoAlbumViewController: UICollectionViewDataSource {
@@ -118,15 +137,20 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         // Needs work, needs to be done with CoreData implementation
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoAlbumCollectionViewCell
         toolBarButton.title = "Remove Selected Pictures"
-        deleteIndexes.append(indexPath.row)
-        //        if cell.imageView.alpha == 1.0 {
-        //            cell.backgroundColor = .white
-        //            cell.imageView.alpha = 0.5
-        //            deleteIndexes.append(indexPath.row)
-        //        } else {
-        //            cell.backgroundColor = .gray
-        //            cell.imageView.alpha = 1.0
-        //        }
+        
+        if cell.imageView.alpha == 1.0 {
+            cell.backgroundColor = .white
+            cell.imageView.alpha = 0.5
+            deleteIndexes.append(indexPath)
+        } else {
+            cell.backgroundColor = .gray
+            cell.imageView.alpha = 1.0
+            
+            if deleteIndexes.contains(indexPath) {
+                deleteIndexes.remove(at: deleteIndexes.index(of: indexPath)!)
+            }
+        }
+        
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
