@@ -11,7 +11,7 @@ import MapKit
 import CoreData
 
 class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelegate {
-
+    
     @IBOutlet weak var deleteLabel: UILabel!
     @IBOutlet weak var deleteToolbar: UIToolbar!
     @IBOutlet weak var mapView: MKMapView!
@@ -25,7 +25,6 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
     override func viewDidLoad() {
         super.viewDidLoad()
         mapView.delegate = self
-        loadingIndicator.isHidden = true
         let gesture = UILongPressGestureRecognizer(target: self, action: #selector(mapTapped))
         mapView.addGestureRecognizer(gesture)
         
@@ -34,11 +33,20 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         
         pins = result
         
-        
+        addSavedPinsToMap()
+    }
+    
+    func addSavedPinsToMap() {
+        for pin in pins {
+            let annotation = MKPointAnnotation()
+            annotation.coordinate = CLLocationCoordinate2D(latitude: pin.latitude, longitude: pin.longitude)
+            mapView.addAnnotation(annotation)
+        }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        loadingIndicator.isHidden = true
         if !deleteToolbar.isHidden {
             deleteToolbar.isHidden = true
             deleteLabel.isHidden = true
@@ -64,8 +72,9 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         let destination = segue.destination as! PhotoAlbumViewController
         destination.pin = pin
         backItem.title = "OK"
+        destination.dataController = self.dataController
         navigationItem.backBarButtonItem = backItem
-
+        
     }
     
     @IBAction func editTapped(_ sender: Any) {
@@ -78,7 +87,7 @@ class TravelLocationsViewController: UIViewController, UIGestureRecognizerDelega
         if gesture.state == .began {
             let location = gesture.location(in: mapView)
             let coord = mapView.convert(location, toCoordinateFrom: mapView)
-        
+            
             let annotation = MKPointAnnotation()
             annotation.coordinate = coord
             mapView.addAnnotation(annotation)
@@ -101,31 +110,15 @@ extension TravelLocationsViewController: MKMapViewDelegate {
         }
         if deleteToolbar.isHidden {
             let pinToSend = pinSelected[0]
-            FlickrAPIClient.makeRequestWith(lat: pinToSend.latitude, long: pinToSend.longitude, completion: {[unowned self] photoObj in
-                
-                var photoArray : [Photo] = []
-                for pic in photoObj.photos.photo {
-                    let photoCD = Photo(context: self.dataController.viewContext)
-                    photoCD.photoBinary = try? Data(contentsOf: pic.url_m)
-                    photoArray.append(photoCD)
-                }
-                
-                DispatchQueue.main.async {
-                    let orderedSet = NSOrderedSet(array: photoArray)
-                    pinToSend.addToPhotos(orderedSet)
-                    try? self.dataController.viewContext.save()
-                    self.loadingIndicator.stopAnimating()
-                    self.performSegue(withIdentifier: "toAlbum", sender: pinToSend)
-                    
-                }
-            })
-            
+            self.loadingIndicator.stopAnimating()
+            self.performSegue(withIdentifier: "toAlbum", sender: pinToSend)
         } else {
             mapView.removeAnnotation(view.annotation!)
             let index = pins.index(of: pinSelected[0])
             dataController.viewContext.delete(pinSelected[0])
-            loadingIndicator.stopAnimating()
-            try? dataController.viewContext.save()
+            self.loadingIndicator.stopAnimating()
+            self.loadingIndicator.isHidden = true
+            try? self.dataController.viewContext.save()
             pins.remove(at: index!)
         }
     }

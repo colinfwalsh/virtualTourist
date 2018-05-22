@@ -17,15 +17,10 @@ class PhotoAlbumViewController: UIViewController {
     
     var pin: Pin!
     
+    var dataController: DataController!
+    
     var deleteIndexes: [Int] = []
     
-    var photosInit: PhotosModel! {
-        didSet {
-            DispatchQueue.main.async {
-                self.collectionView.reloadData()
-            }
-        }
-    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -34,6 +29,30 @@ class PhotoAlbumViewController: UIViewController {
         collectionView.dataSource = self
         mapView.delegate = self
         
+        if (self.pin.photos?.array.isEmpty)! {
+            FlickrAPIClient.makeRequestWith(lat: self.pin.latitude, long: self.pin.longitude, completion: {[weak self] photoObj in
+                
+                guard let `self` = self else {return}
+                
+                let photoArray: [Photo] = photoObj.photos.photo.map { item in
+                    let photoCD = Photo(context: self.dataController.viewContext)
+                    let photoData = try? Data(contentsOf: item.url_m)
+                    if let image = UIImage(data: photoData!) {
+                        photoCD.photoBinary = UIImageJPEGRepresentation(image, 1)
+                        return photoCD
+                    } else {
+                        return Photo()
+                    }
+                }
+                
+                DispatchQueue.main.async {
+                    let orderedSet = NSOrderedSet(array: photoArray)
+                    self.pin.addToPhotos(orderedSet)
+                    try? self.dataController.viewContext.save()
+                    self.collectionView.reloadData()
+                }
+            })
+        }
         
         setAnnotationAndRegion()
         disableInteraction()
@@ -61,15 +80,13 @@ class PhotoAlbumViewController: UIViewController {
             toolBarButton.isEnabled = false
             FlickrAPIClient.makeRequestWith(lat: Double(pin.latitude), long: Double(pin.longitude), completion: {photoObj in
                 DispatchQueue.main.async {
-                    self.photosInit = photoObj
                     self.toolBarButton.isEnabled = true
                 }
             })
         } else {
             toolBarButton.title = "New Collection"
             for i in deleteIndexes {
-                self.photosInit.photos.photo.remove(at: i)
-//                deleteItems(i)
+                //                deleteItems(i)
             }
             self.deleteIndexes.removeAll()
         }
@@ -78,7 +95,6 @@ class PhotoAlbumViewController: UIViewController {
     func deleteItems(_ i: Int) {
         //Do this once coreData is up and running
         collectionView.performBatchUpdates({
-            self.photosInit.photos.photo.remove(at: i)
             self.collectionView.deleteItems(at: [IndexPath(item: i, section: 0)])
         }, completion: { (bool) in
             self.collectionView.reloadItems(at: self.collectionView.indexPathsForVisibleItems)        })
@@ -91,10 +107,10 @@ extension PhotoAlbumViewController: UICollectionViewDelegate {
 
 extension PhotoAlbumViewController: UICollectionViewDataSource {
     func collectionView(_ collectionView: UICollectionView, numberOfItemsInSection section: Int) -> Int {
-        if let photosInit = photosInit {
-            return photosInit.photos.photo.count
+        if let photosCount = pin.photos?.count {
+            return photosCount == 0 ? 21 : photosCount
         } else {
-            return 20
+            return 21
         }
     }
     
@@ -103,32 +119,42 @@ extension PhotoAlbumViewController: UICollectionViewDataSource {
         let cell = collectionView.cellForItem(at: indexPath) as! PhotoAlbumCollectionViewCell
         toolBarButton.title = "Remove Selected Pictures"
         deleteIndexes.append(indexPath.row)
-//        if cell.imageView.alpha == 1.0 {
-//            cell.backgroundColor = .white
-//            cell.imageView.alpha = 0.5
-//            deleteIndexes.append(indexPath.row)
-//        } else {
-//            cell.backgroundColor = .gray
-//            cell.imageView.alpha = 1.0
-//        }
+        //        if cell.imageView.alpha == 1.0 {
+        //            cell.backgroundColor = .white
+        //            cell.imageView.alpha = 0.5
+        //            deleteIndexes.append(indexPath.row)
+        //        } else {
+        //            cell.backgroundColor = .gray
+        //            cell.imageView.alpha = 1.0
+        //        }
     }
     
     func collectionView(_ collectionView: UICollectionView, cellForItemAt indexPath: IndexPath) -> UICollectionViewCell {
         
-        guard let url = photosInit?.photos.photo[indexPath.row].url_m else {
-            let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "loadingCell", for: indexPath) as! LoadingCollectionViewCell
-            cell.activityIndicatorView.startAnimating()
-            return cell}
-        guard let imageData = try? Data(contentsOf: url) else {
-           return UICollectionViewCell()}
+        guard let photos = pin.photos else {return self.initLoadingCell(indexPath: indexPath)}
+        
+        if photos.count == 0 {
+            return self.initLoadingCell(indexPath: indexPath)
+        }
+        
+        guard let photoCD = photos.object(at: indexPath.row) as? Photo else {
+            return self.initLoadingCell(indexPath: indexPath)
+        }
         
         let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "photoCell", for: indexPath) as! PhotoAlbumCollectionViewCell
         
+        
         DispatchQueue.main.async {
             cell.imageView.contentMode = .scaleToFill
-            cell.imageView.image = UIImage(data: imageData)
+            cell.imageView.image = UIImage(data: photoCD.photoBinary!)
         }
         
+        return cell
+    }
+    
+    func initLoadingCell(indexPath: IndexPath) -> LoadingCollectionViewCell{
+        let cell = collectionView.dequeueReusableCell(withReuseIdentifier: "loadingCell", for: indexPath) as! LoadingCollectionViewCell
+        cell.activityIndicatorView.startAnimating()
         return cell
     }
     
